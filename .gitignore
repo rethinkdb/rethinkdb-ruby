@@ -1,2 +1,4 @@
+coverage
+protobuf
 lib/ql2.pb.rb
-
+pkg
