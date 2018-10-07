@@ -50,6 +50,7 @@ RSpec.describe RethinkDB::RQL do
     end
 
     it 'calls #func' do
+      pending
       b = Proc.new {|a| 3}
       expect_any_instance_of(RethinkDB::RQL).to receive(:func).with([2], 3)
       subject.new_func(&b)

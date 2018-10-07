@@ -15,6 +15,7 @@ module RethinkDB::IntegrationHelpers
     end
 
     conn.use(INTEGRATION_TEST_DB)
+    conn.repl
   end
 
   def integration_teardown
