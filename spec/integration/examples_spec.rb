@@ -66,4 +66,61 @@ describe "10-minute guide" do
       expect(also_laura).to eq(laura)
     end
   end
+
+  describe "updating" do
+    it "can update a cursor" do
+      result = r.table("authors").update({"type"=>"fictional"}).run
+      expect(result).to include(
+        {
+          "unchanged"=>0,
+          "skipped"=>0,
+          "replaced"=>3,
+          "inserted"=>0,
+          "errors"=>0,
+          "deleted"=>0
+        }
+      )
+      results = r.table("authors").run.to_a
+      expect(results.first["type"]).to eq("fictional")
+    end
+
+    it "can update a cursor with a condition" do
+      result = r.table("authors").
+        filter{|author| author["name"].eq("William Adama")}.
+        update({"rank"=>"Admiral"}).run
+      expect(result).to include(
+        {
+          "unchanged"=>0,
+          "skipped"=>0,
+          "replaced"=>1,
+          "inserted"=>0,
+          "errors"=>0,
+          "deleted"=>0
+        }
+      )
+      result = r.table("authors").
+        filter{|author| author["name"].eq("William Adama")}.run.to_a.first
+      expect(result["rank"]).to eq("Admiral")
+    end
+
+    it "can append values to arrays in records" do
+      result = r.table('authors').filter{|author| author["name"].eq("Jean-Luc Picard")}.
+        update{|author| {"posts"=>author["posts"].append({
+            "title"=>"Shakespeare",
+            "content"=>"What a piece of work is man..."})
+        }}.run
+      expect(result).to include(
+        {
+          "unchanged"=>0,
+          "skipped"=>0,
+          "replaced"=>1,
+          "inserted"=>0,
+          "errors"=>0,
+          "deleted"=>0
+        }
+      )
+      result = r.table('authors').filter{|author| author["name"].eq("Jean-Luc Picard")}.run.to_a.first
+      expect(result["posts"].last["title"]).to eq("Shakespeare")
+    end
+  end
 end
