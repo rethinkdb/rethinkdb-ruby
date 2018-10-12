@@ -123,4 +123,24 @@ describe "10-minute guide" do
       expect(result["posts"].last["title"]).to eq("Shakespeare")
     end
   end
+
+  describe "deleting" do
+    it "works on a cursor" do
+      result = r.table("authors").
+        filter{ |author| author["posts"].count < 3 }.
+        delete.run
+      expect(result).to include ({
+        "unchanged"=>0,
+        "skipped"=>0,
+        "replaced"=>0,
+        "inserted"=>0,
+        "errors"=>0,
+        "deleted"=>2
+      })
+
+      result = r.table("authors").
+        filter{ |author| author["posts"].count < 3 }.run.to_a
+      expect(result.empty?).to be true
+    end
+  end
 end
