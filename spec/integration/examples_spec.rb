@@ -143,4 +143,47 @@ describe "10-minute guide" do
       expect(result.empty?).to be true
     end
   end
+
+  describe 'listening to a feed' do
+    it 'runs asynchronously' do
+      to_take = 6 # the amount of changes we expect in the change feed
+      @runnning = true
+      result = []
+      cursor = r.table('authors').changes.run
+      iterator_thread = Thread.new do
+        result += cursor.take(to_take)
+      end
+      producer_thread = Thread.new do
+        r.table('authors').filter { |author| author['name'].eq('Jean-Luc Picard') }
+          .update { |author|
+            {
+              'posts' => author['posts'].append(
+                {
+                  'title' => 'Shakespeare',
+                  'content' => 'What a piece of work is man...'
+                }
+              )
+            }
+          }.run
+        r.table('authors').update('type' => 'fictional').run
+        r.table('authors')
+         .filter { |author| author['posts'].count < 3 }
+         .delete.run
+      end
+
+      waiter_thread = Thread.new do
+        sleep 2
+        raise 'Timeout' if @running
+      end
+
+      @running = false
+      [iterator_thread, producer_thread].map(&:join)
+
+      expect(result.length).to eq(to_take)
+      result.each do |r|
+        expect(r).to include('new_val')
+        expect(r).to include('old_val')
+      end
+    end
+  end
 end

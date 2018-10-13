@@ -10,9 +10,11 @@ module RethinkDB::IntegrationHelpers
   end
 
   def integration_setup
-    if not r.db_list.run(conn).include? INTEGRATION_TEST_DB
-      r.db_create(INTEGRATION_TEST_DB).run(conn)
+    if r.db_list.run(conn).include? INTEGRATION_TEST_DB
+      r.db_drop(INTEGRATION_TEST_DB).run(conn)
     end
+
+    r.db_create(INTEGRATION_TEST_DB).run(conn)
 
     conn.use(INTEGRATION_TEST_DB)
     conn.repl
