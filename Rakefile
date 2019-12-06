@@ -10,6 +10,7 @@ PROTO_FILE_URL = "https://raw.githubusercontent.com/RethinkDB/rethinkdb/next/src
 
 PROTO_RB_FILE = "../lib/ql2.pb.rb"
 
+desc "Downloads the latest RDB protocol protobufs and generates its API"
 task :protobuf do
   mkdir_p "protobuf"
   cd "protobuf"
