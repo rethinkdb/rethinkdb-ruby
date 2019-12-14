@@ -1,12 +1,12 @@
 
 Gem::Specification.new do |s|
   s.name      = 'rethinkdb'
-  s.version   = '2.3.0.0'
+  s.version   = '2.4.0.0'
   s.summary   = 'This package provides the Ruby driver library for the RethinkDB database server.'
   s.author    = 'RethinkDB Inc.'
   s.email     = 'bugs@rethinkdb.com'
-  s.homepage  = 'http://rethinkdb.com'
-  s.license   = 'Apache-2'
+  s.homepage  = 'https://rethinkdb.com'
+  s.license   = 'Apache-2.0'
   s.files     = Dir['lib/*.rb']
   
   s.required_ruby_version = '>= 1.9.0'
