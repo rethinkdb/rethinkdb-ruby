@@ -6,7 +6,7 @@ RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 
 PROTO_FILE_NAME = "ql2.proto"
-PROTO_FILE_URL = "https://raw.githubusercontent.com/RethinkDB/rethinkdb/next/src/rdb_protocol/#{PROTO_FILE_NAME}"
+PROTO_FILE_URL = "https://raw.githubusercontent.com/RethinkDB/rethinkdb/80b4c72a564230bccc761183ef27bca00fe9a012/src/rdb_protocol/#{PROTO_FILE_NAME}"
 
 PROTO_RB_FILE = "../lib/ql2.pb.rb"
 
